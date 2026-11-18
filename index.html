@@ -179,6 +179,21 @@ button.on{background:var(--accent);color:var(--accent-text);box-shadow:0 2px 9px
 .morder{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--chip);border:1px dashed var(--card-line);font-size:13px;line-height:1.6;}
 .morder small{color:var(--text-secondary);}
 @media(max-width:640px){ .mgrid{grid-template-columns:repeat(2,1fr);} }
+:root { --uw1: rgba(120,220,255,.10); --uw2: rgba(10,70,140,.55); }
+#underwater{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 1.2s;
+  background:radial-gradient(ellipse at 50% -10%, var(--uw1), var(--uw2));}
+#underwater.show{opacity:1;}
+.regions .rgh{font-size:10.5px;color:var(--text-secondary);padding:7px 9px 3px;letter-spacing:.12em;border-top:1px dashed var(--line);margin-top:3px;}
+.regions .rgh:first-of-type{border-top:0;margin-top:0;}
+.help ol.quick{margin:4px 0 6px;padding-left:20px;font-size:13.5px;line-height:1.75;}
+.help ol.quick li{margin-bottom:6px;}
+.help details.more{margin-top:8px;border:1px solid var(--card-line);border-radius:12px;background:var(--chip);}
+.help details.more summary{cursor:pointer;list-style:none;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text);display:flex;justify-content:space-between;align-items:center;}
+.help details.more summary::-webkit-details-marker{display:none;}
+.help details.more summary::after{content:'展开';font-size:11.5px;font-weight:400;color:var(--text-secondary);}
+.help details.more[open] summary::after{content:'收起';}
+.help details.more > :not(summary){margin:0 14px 12px;}
+.help details.more ul{padding-left:18px;}
 #tip{position:fixed;z-index:7;pointer-events:none;padding:5px 10px;border-radius:8px;font-size:12px;
   background:var(--surface);color:var(--text);border:1px solid var(--line);box-shadow:0 4px 14px var(--shadow);
   opacity:0;transition:opacity .12s;white-space:nowrap;}
@@ -248,99 +263,97 @@ button.on{background:var(--accent);color:var(--accent-text);box-shadow:0 2px 9px
 <button id="regionToggle">去别的地方 ▸</button>
 <div id="travel"><div class="plane"></div><div class="tt">正在前往</div><div class="tn" id="travelName"></div><div class="ts" id="travelSub"></div></div>
 <div id="eggBanner"><b id="eggTitle"></b><span id="eggSub"></span></div>
+<div id="underwater"></div>
 <div id="tip"></div>
 <div id="flash"></div>
 <div id="toast"></div>
 <div class="help" id="help"><div class="card">
   <h2>月亮饼妙妙屋 · 使用说明</h2>
-  <p class="sub">18×13 米的三层北欧原木风别墅，6 间卧室可以招待朋友，后院有泳池，前院有花园，还能一键开「妙妙屋式」派对。</p>
-  <h3>一、看房子</h3>
-  <ul>
-    <li><b>旋转 / 缩放</b>：拖动画面；滚轮或双指捏合缩放；双击开关自动旋转</li>
-    <li><b>屋顶</b>：隐藏屋顶，从上往下看三层布局</li>
-  </ul>
-  <h3>二、直达各个区域</h3>
-  <table>
-    <tr><td>1F</td><td>挑高客厅 + 派对大厅、8 人长餐桌、厨房、音乐角（唱片机 / 钢琴 / 鱼缸）</td></tr>
-    <tr><td>2F</td><td>客房：樱花房、海盐房、薄荷房；阅读走廊可俯看客厅；前阳台</td></tr>
-    <tr><td>3F</td><td>星星房、月亮房、主人房；家庭起居区；主卧阳台；后侧观星露台</td></tr>
-    <tr><td>泳池</td><td>后院：跳板、滑梯、甜甜圈泳圈、小黄鸭、躺椅、遮阳伞</td></tr>
-    <tr><td>花园</td><td>前院：花圃、许愿喷泉、秋千、信箱、发光蘑菇；东侧烧烤和吊床</td></tr>
-  </table>
-  <ul style="margin-top:8px">
-    <li>键盘 <kbd>1</kbd>~<kbd>5</kbd> 也能直达；屋里还有<b>妙妙电梯</b>，点一下就去下一层</li>
-    <li><b>走路</b>：<kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / 方向键，<kbd>Shift</kbd> 跑；手机用左下角方向键；拖动画面看四周</li>
-    <li>走进泳池就会游泳，从浅水那头可以走上岸</li>
-  </ul>
-  <h3>卧室风格（参考图）</h3>
-  <ul>
-    <li>6 间卧室统一换成北欧复古风：深棕色木天花、灰绿色墙面、白色踢脚线、浅松木地板</li>
-    <li>洋甘菊图案的绗缝被，每间的花色对应房名（樱花粉、海盐蓝、薄荷绿、星星黄、月亮紫，主人房是芥末黄）；白色褶皱枕头，床尾放着卷好的灰色毛巾</li>
-    <li>白瓷球环形吊灯、橙色锥形台灯、藤编斗柜配木框镜，窗台上摆着小白椰和一叠杂志</li>
-  </ul>
-  <h3>COZY 厨房 &amp; 吧台（1F 西侧）</h3>
-  <table>
-    <tr><td>复古咖啡机</td><td>打开点单菜单：拿铁、卡布奇诺、澳白、抹茶拿铁、热可可、焦糖玛奇朵；可以选热/冰、甜度、牛奶/燕麦奶/椰奶</td></tr>
-    <tr><td>调酒摇壶</td><td>打开特调菜单：蓝色夏威夷、紫罗兰气泡、粉红莫吉托、日落橙、薄荷朱莉普、星空特调；可以选经典版/无酒精、冰量</td></tr>
-    <tr><td>吧台边的小黑板</td><td>写着<b>本季限定</b>，跟着季节换：春 樱花拿铁/樱花气泡，夏 海盐椰子冷萃/西瓜薄荷冰沙，秋 南瓜香料拿铁/苹果肉桂热饮，冬 姜饼拿铁/热红酒（热饮会在灶台的小铜锅里煮）</td></tr>
-    <tr><td>吧台上的饮品</td><td>点一下喝一口，喝完会自动收走</td></tr>
-    <tr><td>酒柜</td><td>点亮或关掉背光，酒瓶会发光</td></tr>
-    <tr><td>烤箱</td><td>烤一盘曲奇，「叮」一声出炉，点曲奇可以吃掉一块</td></tr>
-    <tr><td>灶台（平底锅 / 汤锅）</td><td>打开<b>做菜菜单</b>：家常主菜、甜点早午餐、本季限定；可选份量（一人份/两人份/全家份）、口味、辣度或甜度、加一份小菜。会按步骤做菜，平底锅滋滋响、汤锅咕嘟咕嘟、烤的菜进烤箱，做好直接端上餐桌</td></tr>
-    <tr><td>餐桌上的菜</td><td>点一下吃一口，吃完只剩空盘子</td></tr>
-    <tr><td>水槽</td><td><b>收拾碗筷</b>：桌上的盘子一个个飞进水槽，冒泡泡洗干净（做菜菜单里也有这个按钮）</td></tr>
-    <tr><td>复古冰箱</td><td>打开看看里面有什么</td></tr>
-    <tr><td>吧台椅</td><td>坐下，正对吧台</td></tr>
-    <tr><td>白色球形吊灯</td><td>开关厨房的灯</td></tr>
-    <tr><td>3F 麦克风</td><td>开始/停止唱 K：电视上滚动歌词，朋友们轮流当主唱，其它人挥荧光棒，唱完打分</td></tr>
-  </table>
-  <h3>记忆卡片</h3>
-  <ul>
-    <li>点右上角<b>「记忆卡片」</b>：拍下当前画面，配上地点、季节、日期、一起玩的朋友和最近做过的事，生成一张拍立得卡片</li>
-    <li>在卧室<b>照镜子自拍</b>也会自动生成</li>
-    <li>可以保存成图片，最近 12 张会收进<b>「回忆相册」</b></li>
-  </ul>
-  <h3>给小屋换颜色</h3>
-  <ul>
-    <li>点底部<b>「换颜色」</b>、前院小路边的<b>魔法画架</b>，或者在外面看房子时<b>直接点外墙/屋顶</b>，都能打开调色盘</li>
-    <li>8 套现成配色：月光蓝紫、樱花草莓、薄荷汽水、奶油布丁、蜜桃乌龙、午夜星空、彩虹糖、北欧原木</li>
-    <li>也可以自己调墙面、屋顶、门窗框、点缀色，或者「摇一摇」随机配色；你选的颜色会保存下来</li>
-  </ul>
-  <h3>三、朋友来做客</h3>
-  <ul>
-    <li>点<b>「邀请朋友」</b>（或者去前院打开<b>信箱</b>），波波熊、米米兔、糖糖猫、豆豆狗、棉棉羊会来家里玩，先在客厅聚一聚</li>
-    <li>朋友来了以后，同一个按钮会变成<b>「一起玩」</b>，可以选：<b>一起做饭</b>（戴上小厨师帽围在灶台边）、<b>围桌吃饭</b>（一人一把椅子）、<b>一起烤火</b>（坐在壁炉前烤棉花糖）、<b>一起唱 K</b>（3F 客厅，轮流当主唱）</li>
-    <li>做好的菜端上桌，朋友们会自动坐过来一起吃；点麦克风也会自动开唱</li>
-    <li>点朋友可以打招呼，它们会跳一跳、冒爱心，说的话也会跟着当下在做的事变</li>
-  </ul>
-  <h3>四、开派对（妙妙屋风格）</h3>
-  <ul>
-    <li>点<b>「开派对」</b>、1F 粉色<b>派对按钮</b>或客厅的<b>迪斯科球</b>（键盘 <kbd>P</kbd>）</li>
-    <li>会有：派对音乐、整栋房子跟着节拍跳舞、彩色窗户和灯光、迪斯科光点、气球升空、彩纸飘落、烟花、泳池喷泉，朋友们一起跳舞</li>
-    <li>夜晚开派对效果最好，烟花也更多</li>
-  </ul>
-  <h3>五、可以点的东西</h3>
-  <table>
-    <tr><td>屋里</td><td>纸灯笼和床头灯（开关灯）、壁炉、窗帘、大门、沙发（坐下）、6 张床（睡一觉换昼夜）、书架、绿植、皮革椅、唱片机、小猫、热可可、藤编吊椅、鱼缸、香薰蜡烛、咖啡机、钢琴、星空投影仪、懒人沙发、电梯、派对按钮、迪斯科球</td></tr>
-    <tr><td>卧室</td><td>白瓷球环形吊灯（开关吊灯）、橙色小台灯（开关台灯）、木框镜子（对镜自拍，会闪一下）、窗台小白椰（浇水）</td></tr>
-    <tr><td>阳台</td><td>天文望远镜（看流星）</td></tr>
-    <tr><td>花园</td><td>花圃（浇水开花、引来蝴蝶）、许愿喷泉、秋千、信箱、蘑菇、烧烤架、吊床、塔顶的星星和爱心</td></tr>
-    <tr><td>泳池</td><td>跳板（跳水）、滑梯、泳圈、小黄鸭、遮阳伞、躺椅，点水面可以换泳池灯颜色</td></tr>
-  </table>
-  <p class="sub" style="margin-top:8px">右上角「小幸福 x / N」会记录你发现过的互动，全部点亮有烟花惊喜。电脑上鼠标移上去会有提示。声音要先点一下页面才会出来。</p>
-  <h3>六、换场景</h3>
-  <ul>
-    <li><b>地区</b>（屏幕左侧，手机点「去别的地方」）：北欧峡湾、日本京都、埃及撒哈拉、瑞士雪山、江南水乡、冰岛极光、希腊圣托里尼、加拿大枫林、巴厘岛、俄罗斯莫斯科、福建泉州。切换时会有一段「正在前往」的旅行过场</li>
-    <li><b>地标彩蛋</b>：每个地区的风景里藏着 3 个可以点的地标（鼠标移上去会提示）。点一个会有小互动和一句当地小知识；<b>3 个都找到，就会触发这个地区的终极彩蛋</b>。左侧每个地区后面的 x/3 就是进度，彩蛋解锁后可以再点任意地标重播</li>
-    <li><b>季节</b>：春、夏、秋、冬；<b>夜晚</b>：串灯、蘑菇、星星、窗户都会亮</li>
-  </ul>
-  <h3>七、推荐玩法</h3>
-  <ul>
-    <li>挨个地区找齐 3 个地标，看 11 个终极彩蛋：峡湾鲸鱼跃出、金字塔光柱、莫斯科套娃、泉州簪花雨……</li>
-    <li>邀请朋友 → 切到夜晚 → 开派对 → 拉远镜头看整栋房子跳舞放烟花</li>
-    <li>去泳池 → 点滑梯滑下去 → 再去跳板跳水 → 躺在躺椅上晒太阳</li>
-    <li>冰岛 + 冬 + 夜晚 → 3F 观星露台看流星和极光</li>
-  </ul>
+  <p class="sub">一栋可以逛、可以玩、可以请朋友来的三层小屋。先看下面 5 条就够了，其它的边玩边发现。</p>
+  <ol class="quick">
+    <li><b>看房子</b>：拖动画面旋转，滚轮 / 双指缩放。底部 <b>1F / 2F / 3F / 泳池 / 花园</b> 一键直达；进屋后用 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 或左下角方向键走路</li>
+    <li><b>点一点</b>：家具、动物、风景大多都能点。电脑上鼠标移上去会提示能做什么，右上角「小幸福」会记录你发现了多少</li>
+    <li><b>请朋友来</b>：点「邀请朋友」，再点「一起玩」：一起做饭、围桌吃饭、烤火、唱 K；点「开派对」整栋房子会跟着音乐跳舞</li>
+    <li><b>去旅行</b>：左侧选地区（16 个），每个地方藏着 3 个「?」地标，<b>找齐就能看到终极彩蛋</b></li>
+    <li><b>留个纪念</b>：右上角「记忆卡片」把此刻拍成拍立得；底部「换颜色」给小屋换配色</li>
+  </ol>
+
+  <details class="more">
+    <summary>各区域都有什么</summary>
+    <table>
+      <tr><td>1F</td><td>挑高客厅、壁炉和小猫、音乐角（唱片机 / 钢琴 / 鱼缸）、厨房和吧台、8 人长餐桌、派对按钮</td></tr>
+      <tr><td>2F</td><td>客房：樱花房、海盐房、薄荷房；阅读走廊；前阳台</td></tr>
+      <tr><td>3F</td><td>星星房、月亮房、主人房；K 歌客厅；主卧阳台；后侧观星露台</td></tr>
+      <tr><td>泳池</td><td>跳板、滑梯、泳圈、小黄鸭、躺椅、遮阳伞；走进去就能游泳</td></tr>
+      <tr><td>花园</td><td>花圃、许愿喷泉、秋千、信箱、发光蘑菇、魔法画架；东侧烧烤和吊床</td></tr>
+    </table>
+    <p class="sub">屋里还有一部妙妙电梯，点一下去下一层。卧室参考北欧复古风：深棕木天花、灰绿墙、小花绗缝被、白瓷球吊灯。</p>
+  </details>
+
+  <details class="more">
+    <summary>厨房、吧台和做菜</summary>
+    <table>
+      <tr><td>咖啡机</td><td>拿铁、卡布奇诺、澳白、抹茶拿铁、热可可、焦糖玛奇朵；可选热/冰、甜度、奶</td></tr>
+      <tr><td>调酒摇壶</td><td>6 款特调，都有无酒精版，可选冰量</td></tr>
+      <tr><td>小黑板</td><td>本季限定饮品，跟着季节变</td></tr>
+      <tr><td>灶台</td><td>家常主菜、甜点、本季限定菜；可选份量、口味、辣度，做好自动端上餐桌</td></tr>
+      <tr><td>水槽</td><td>收拾碗筷，盘子会飞进水槽洗干净</td></tr>
+      <tr><td>其它</td><td>烤箱烤曲奇、冰箱、酒柜灯、吧台椅、厨房吊灯</td></tr>
+    </table>
+  </details>
+
+  <details class="more">
+    <summary>和朋友一起玩、开派对</summary>
+    <ul>
+      <li>「邀请朋友」或去前院打开信箱，5 位朋友会来家里玩</li>
+      <li>「一起玩」：<b>一起做饭</b>（戴小厨师帽）、<b>围桌吃饭</b>、<b>一起烤火</b>（烤棉花糖）、<b>一起唱 K</b>（3F，轮流当主唱，唱完打分）</li>
+      <li>做菜时朋友会自动来帮忙，菜上桌会自动坐过来吃</li>
+      <li>「开派对」或键盘 <kbd>P</kbd>：音乐、气球、彩纸、烟花、整栋房子跳舞；夜晚效果最好</li>
+    </ul>
+  </details>
+
+  <details class="more">
+    <summary>16 个地区和彩蛋</summary>
+    <ul>
+      <li><b>中国</b>：江南水乡、福建泉州、新疆阿勒泰、四川九寨沟、吉林长白山、海南潜水</li>
+      <li><b>世界</b>：北欧峡湾、日本京都、埃及撒哈拉、瑞士雪山、冰岛极光、希腊圣托里尼、加拿大魁北克、巴厘岛、俄罗斯莫斯科、非洲大草原</li>
+      <li>左侧每个地区后面的 x/3 是地标进度；彩蛋解锁后，连点两次任意地标可以重播</li>
+      <li>底部还能切换春夏秋冬和白天夜晚，风景、饮品、菜单都会跟着变</li>
+    </ul>
+  </details>
+
+  <details class="more">
+    <summary>可以点的东西（完整清单）</summary>
+    <table>
+      <tr><td>屋里</td><td>灯笼、壁炉、窗帘、大门、沙发、床（睡一觉换昼夜）、书架、绿植、皮革椅、唱片机、小猫、热可可、吊椅、鱼缸、蜡烛、钢琴、星空投影仪、懒人沙发、电梯、迪斯科球</td></tr>
+      <tr><td>卧室</td><td>环形吊灯、橙色台灯、木框镜子（自拍生成记忆卡片）、窗台小白椰</td></tr>
+      <tr><td>阳台</td><td>天文望远镜（看流星）</td></tr>
+      <tr><td>花园</td><td>花圃、喷泉、秋千、信箱、蘑菇、烧烤架、吊床、魔法画架、塔顶的星星和爱心</td></tr>
+      <tr><td>泳池</td><td>跳板、滑梯、泳圈、小黄鸭、遮阳伞、躺椅、水面（换泳池灯颜色）</td></tr>
+    </table>
+  </details>
+
+  <details class="more">
+    <summary>操作和小提示</summary>
+    <ul>
+      <li>双击画面开关自动旋转；「屋顶」按钮可以隐藏屋顶看布局</li>
+      <li>键盘 <kbd>1</kbd>~<kbd>5</kbd> 直达区域，<kbd>Shift</kbd> 跑步，<kbd>Esc</kbd> 关闭弹窗</li>
+      <li>换颜色：底部按钮、前院魔法画架，或在外面直接点外墙 / 屋顶；8 套配色或自己调</li>
+      <li>记忆卡片可以保存成图片，最近 12 张在「回忆相册」里</li>
+      <li>声音要先点一下页面才会出来；进度保存在当前浏览器里</li>
+    </ul>
+  </details>
+
+  <details class="more">
+    <summary>推荐玩法</summary>
+    <ul>
+      <li>邀请朋友 → 夜晚 → 开派对 → 拉远镜头看整栋房子跳舞放烟花</li>
+      <li>做一桌菜 → 和朋友围桌吃饭 → 收拾碗筷 → 一起烤火</li>
+      <li>泳池：滑梯滑下去，再跳一次水，躺在躺椅上晒太阳</li>
+      <li>挨个地区找地标：天池水怪、动物大迁徙、海南潜水……</li>
+    </ul>
+  </details>
+
   <button class="go" id="helpClose">开始逛逛</button>
 </div></div>
 <div class="help" id="memo"><div class="card memo-card">
@@ -2275,9 +2288,9 @@ function groundDisc(g, r, color){
   const m = new THREE.Mesh(new THREE.CircleGeometry(r,80), new THREE.MeshStandardMaterial({color:new THREE.Color(color), roughness:1}));
   m.rotation.x = -Math.PI/2; m.position.y = -0.5; m.receiveShadow = true; g.add(m);
 }
-function waterRing(g, innerR, color){
-  const m = new THREE.Mesh(new THREE.RingGeometry(innerR-0.4, 1600, 96, 1), new THREE.MeshStandardMaterial({color:new THREE.Color(color), roughness:0.1, metalness:0.6}));
-  m.rotation.x = -Math.PI/2; m.position.y = -0.78; g.add(m);
+function waterRing(g, innerR, color, op){
+  const m = new THREE.Mesh(new THREE.RingGeometry(innerR-0.4, 1600, 96, 1), new THREE.MeshStandardMaterial(Object.assign({color:new THREE.Color(color), roughness:0.1, metalness:op ? 0.2 : 0.6}, op ? {transparent:true, opacity:op} : {})));
+  m.rotation.x = -Math.PI/2; m.position.y = -0.78; g.add(m); g.userData.water = m;
 }
 
 
@@ -2342,6 +2355,135 @@ function boat(col, len, opt){
   if (o.mast){ addBox(g, 0.1, 4, 0.1, 0, 2.3, 0, '#6b4f37'); const sail = addBox(g, 0.05, 2.4, 2.6, 0.05, 2.7, 0, '#e8dfcf'); for (let i=0;i<4;i++) addBox(g, 0.06, 0.4, 2.62, 0.06, 1.7+i*0.6, 0, '#b8483a'); }
   if (o.canopy){ const c = meshOf(new THREE.CylinderGeometry(0.62,0.62,len*0.5,12,1,true,0,Math.PI), mat('#2f2a28',{side:THREE.DoubleSide, roughness:1}), g, 0, 0.55, 0); c.rotation.z = Math.PI/2; }
   if (o.shields) for (let i=0;i<5;i++) for (const sz of [-1,1]) meshOf(new THREE.CylinderGeometry(0.22,0.22,0.06,12), mat(['#e0bd55','#b8483a','#3a5a8a'][i%3]), g, -len/2+0.6+i*(len-1.2)/4, 0.75, sz*0.58).rotation.x = Math.PI/2;
+  return g;
+}
+
+
+/* ---------- 新地区的造景零件 ---------- */
+const LMREF = {};
+function acacia(g,x,z,s){
+  const grp = new THREE.Group();
+  const tr = meshOf(new THREE.CylinderGeometry(0.15*s,0.3*s,3.6*s,6), mat('#6b5236',{flatShading:true}), grp, 0, 1.8*s, 0); tr.rotation.z = 0.12;
+  for (let i=0;i<3;i++){ const c = meshOf(new THREE.CylinderGeometry((2.2-i*0.5)*s,(2.6-i*0.5)*s,0.45*s,9), mat(['#6f8a3a','#7f9a46','#5f7a32'][i],{flatShading:true,roughness:1}), grp, rnd(-0.6,0.6)*s, (3.7+i*0.3)*s, rnd(-0.6,0.6)*s); }
+  grp.position.set(x,-0.5,z); g.add(grp);
+}
+function grassTuft(g,x,z,s,col){
+  const grp = new THREE.Group();
+  for (let i=0;i<5;i++){ const b = meshOf(new THREE.ConeGeometry(0.08*s,0.9*s,4), mat(col||'#c9b06a',{flatShading:true}), grp, rnd(-0.2,0.2)*s, 0.45*s, rnd(-0.2,0.2)*s); b.rotation.z = rnd(-0.4,0.4); }
+  grp.position.set(x,-0.5,z); g.add(grp);
+}
+function mapleTree(g,x,z,s,sea){
+  const cols = sea.snow > 0.5 ? undefined : state.season === 'spring' ? ['#8fc46a','#a9d18e'] : state.season === 'summer' ? ['#4f7a45','#5c8a4a'] : ['#e0503a','#c9452e','#f2a33a','#d9341f'];
+  broad(g,x,z,s,sea,cols);
+}
+function beautyPine(g,x,z,s,sea){
+  const grp = new THREE.Group();
+  meshOf(new THREE.CylinderGeometry(0.12*s,0.2*s,7*s,7), mat('#c9763e',{roughness:0.8}), grp, 0, 3.5*s, 0);
+  const col = sea.snow > 0.5 ? '#eef3f6' : '#3f6b3a';
+  for (let i=0;i<3;i++) meshOf(new THREE.IcosahedronGeometry((1.2-i*0.25)*s,0), mat(i===0 && sea.snow>0.5 ? '#ffffff' : col,{flatShading:true,roughness:1}), grp, rnd(-0.4,0.4)*s, (6.6+i*0.9)*s, rnd(-0.4,0.4)*s).scale.y = 0.55;
+  grp.position.set(x,-0.5,z); g.add(grp);
+}
+function frostTree(g,x,z,s,sea){
+  /* 长白山雾凇：枝头挂满白霜 */
+  const grp = new THREE.Group();
+  meshOf(new THREE.CylinderGeometry(0.1*s,0.16*s,3*s,6), mat('#5a4a40'), grp, 0, 1.5*s, 0);
+  const frost = sea.snow > 0.5 || state.season === 'autumn' ? '#f4f8fb' : '#5d8f4f';
+  for (let i=0;i<5;i++) meshOf(new THREE.IcosahedronGeometry((0.7+Math.random()*0.4)*s,0), mat(frost,{flatShading:true,roughness:1}), grp, rnd(-0.9,0.9)*s, (2.6+rnd(0,1.4))*s, rnd(-0.9,0.9)*s);
+  grp.position.set(x,-0.5,z); g.add(grp);
+}
+function yurt(col){
+  const grp = new THREE.Group();
+  meshOf(new THREE.CylinderGeometry(2.6,2.6,2.0,20), mat('#f4efe2',{roughness:0.95}), grp, 0, 1.0, 0);
+  meshOf(new THREE.CylinderGeometry(2.62,2.62,0.35,20), mat(col||'#c9452e'), grp, 0, 1.55, 0);
+  meshOf(new THREE.ConeGeometry(2.9,1.6,20), mat('#f4efe2',{roughness:0.95}), grp, 0, 2.8, 0);
+  meshOf(new THREE.CylinderGeometry(0.35,0.35,0.3,12), mat(col||'#c9452e'), grp, 0, 3.6, 0);
+  addBox(grp, 0.9, 1.5, 0.1, 0, 0.75, 2.58, '#c9452e');
+  for (let i=0;i<10;i++){ const a = i/10*Math.PI*2; meshOf(new THREE.BoxGeometry(0.18,0.18,0.02), mat(i%2 ? '#2f6f9e' : '#f2c14e'), grp, Math.cos(a)*2.64, 1.55, Math.sin(a)*2.64).rotation.y = -a + Math.PI/2; }
+  return grp;
+}
+function logCabin(roof){
+  const grp = new THREE.Group();
+  for (let i=0;i<8;i++){ for (const [w,d,x,z] of [[4.4,0.32,0,1.6],[4.4,0.32,0,-1.6],[0.32,3.5,2.05,0],[0.32,3.5,-2.05,0]]){ const lg = meshOf(new THREE.CylinderGeometry(0.17,0.17,Math.max(w,d)+0.3,8), mat(i%2 ? '#9a6a3e' : '#8a5a32',{roughness:1}), grp, x, 0.17+i*0.32, z); lg.rotation.z = w > d ? Math.PI/2 : 0; lg.rotation.x = w > d ? 0 : Math.PI/2; } }
+  const r1 = addBox(grp, 5.2, 0.18, 2.6, 0, 3.2, -0.9, roof||'#5a6a4a'); r1.rotation.x = 0.75;
+  const r2 = addBox(grp, 5.2, 0.18, 2.6, 0, 3.2, 0.9, roof||'#5a6a4a'); r2.rotation.x = -0.75;
+  addBox(grp, 0.9, 1.5, 0.1, 0, 0.75, 1.78, '#5a3a28'); addBox(grp, 0.8, 0.7, 0.1, 1.3, 1.5, 1.78, '#fff1c8');
+  return grp;
+}
+function oldHouse(g, x, z, roofCol, wallCol, rot){
+  /* 魁北克老城的石头房子：陡坡彩色屋顶 + 老虎窗 */
+  const grp = new THREE.Group();
+  addBox(grp, 5, 4.4, 4, 0, 2.2, 0, wallCol||'#d9cdb5', {roughness:1});
+  const r1 = addBox(grp, 5.3, 0.2, 2.9, 0, 5.2, -1.0, roofCol); r1.rotation.x = 1.0;
+  const r2 = addBox(grp, 5.3, 0.2, 2.9, 0, 5.2, 1.0, roofCol); r2.rotation.x = -1.0;
+  for (const sx of [-1.4,1.4]){ addBox(grp, 0.8, 0.9, 0.6, sx, 5.2, 1.4, '#f4efe6'); addBox(grp, 0.6, 0.6, 0.05, sx, 5.2, 1.72, '#3a4580'); }
+  for (const sx of [-1.4,0,1.4]) addBox(grp, 0.8, 1.0, 0.06, sx, 2.8, 2.02, '#3a4580');
+  addBox(grp, 0.9, 1.8, 0.06, 0, 0.9, 2.02, roofCol);
+  addBox(grp, 0.5, 1.2, 0.5, 1.8, 6.4, 0, '#8a7a6a');
+  grp.position.set(x,-0.5,z); grp.rotation.y = rot||0; g.add(grp); return grp;
+}
+function coral(g,x,y,z,s){
+  const grp = new THREE.Group(), cols = ['#ff7f9e','#ffa94d','#c39bff','#ff6b6b','#f7e05a','#63e6be'];
+  const kind = Math.floor(Math.random()*3);
+  if (kind === 0) for (let i=0;i<5;i++){ const b = meshOf(new THREE.CylinderGeometry(0.06*s,0.12*s,rnd(0.8,1.6)*s,6), mat(cols[i%6],{roughness:0.7}), grp, rnd(-0.4,0.4)*s, 0.6*s, rnd(-0.4,0.4)*s); b.rotation.set(rnd(-0.5,0.5),0,rnd(-0.5,0.5)); }
+  else if (kind === 1) meshOf(new THREE.SphereGeometry(0.7*s,10,8), mat(cols[Math.floor(Math.random()*6)],{roughness:0.9, flatShading:true}), grp, 0, 0.4*s, 0).scale.y = 0.7;
+  else { const fan = meshOf(new THREE.CircleGeometry(0.9*s, 10, 0, Math.PI), mat(cols[Math.floor(Math.random()*6)],{side:THREE.DoubleSide, roughness:0.8}), grp, 0, 0.1*s, 0); fan.rotation.y = rnd(0,3); }
+  grp.position.set(x,y,z); g.add(grp);
+}
+function giraffe(s){
+  const g = new THREE.Group(), m = mat('#e8b35a',{roughness:0.9}), sp = mat('#8a5a2c');
+  meshOf(new THREE.SphereGeometry(0.6,14,10), m, g, 0, 2.2, 0).scale.set(1.5,0.85,0.75);
+  for (const [lx,lz] of [[-0.55,-0.22],[0.55,-0.22],[-0.55,0.22],[0.55,0.22]]) meshOf(new THREE.CylinderGeometry(0.07,0.06,2.0,6), m, g, lx, 1.0, lz);
+  const nk = meshOf(new THREE.CylinderGeometry(0.14,0.24,2.4,8), m, g, 0.75, 3.4, 0); nk.rotation.z = -0.35;
+  meshOf(new THREE.SphereGeometry(0.28,12,8), m, g, 1.2, 4.6, 0).scale.set(1.5,0.8,0.8);
+  for (const sz of [-1,1]) meshOf(new THREE.CylinderGeometry(0.03,0.03,0.3,5), mat('#6b4a2a'), g, 1.1, 4.9, sz*0.1);
+  for (let i=0;i<14;i++) meshOf(new THREE.SphereGeometry(0.11,8,6), sp, g, rnd(-0.7,0.9), rnd(2.0,3.8), (i%2?1:-1)*rnd(0.3,0.45)).scale.set(1,1,0.3);
+  meshOf(new THREE.CylinderGeometry(0.02,0.02,0.7,5), m, g, -0.9, 2.0, 0).rotation.z = 0.5;
+  g.scale.setScalar(s||1); return g;
+}
+function elephant(s){
+  const g = new THREE.Group(), m = mat('#8a8a90',{roughness:0.95});
+  meshOf(new THREE.SphereGeometry(1.2,16,12), m, g, 0, 1.9, 0).scale.set(1.4,1,1);
+  for (const [lx,lz] of [[-0.9,-0.5],[0.9,-0.5],[-0.9,0.5],[0.9,0.5]]) meshOf(new THREE.CylinderGeometry(0.3,0.32,1.4,10), m, g, lx, 0.7, lz);
+  meshOf(new THREE.SphereGeometry(0.75,14,10), m, g, 1.7, 2.3, 0);
+  for (const sz of [-1,1]){ const e = meshOf(new THREE.CircleGeometry(0.8,14), mat('#7a7a82',{side:THREE.DoubleSide}), g, 1.4, 2.3, sz*0.72); e.rotation.y = sz*0.5; meshOf(new THREE.ConeGeometry(0.07,0.6,6), mat('#f4efe2'), g, 2.2, 1.85, sz*0.3).rotation.z = -1.9; }
+  const trunk = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([V3(2.25,2.1,0),V3(2.6,1.5,0),V3(2.6,0.8,0),V3(2.8,0.5,0)]), 12, 0.16, 8);
+  meshOf(trunk, m, g, 0, 0, 0);
+  meshOf(new THREE.CylinderGeometry(0.03,0.02,0.7,5), m, g, -1.7, 1.8, 0).rotation.z = 0.4;
+  g.scale.setScalar(s||1); return g;
+}
+function striped(base, stripe, s, opt){
+  const g = quadruped(base, s, opt);
+  for (let i=0;i<7;i++) meshOf(new THREE.BoxGeometry(0.07, 0.9, 0.78), mat(stripe), g, -0.55+i*0.18, 1.02, 0).rotation.z = rnd(-0.2,0.2);
+  return g;
+}
+function lion(s){
+  const g = quadruped('#d9a25a', s||1);
+  meshOf(new THREE.SphereGeometry(0.38,12,10), mat('#9a5a2a',{roughness:1, flatShading:true}), g, 0.9, 1.6, 0);
+  return g;
+}
+function turtle(s){
+  const g = new THREE.Group();
+  meshOf(new THREE.SphereGeometry(0.9,14,10), mat('#5f8a4a',{flatShading:true}), g, 0, 0.45, 0).scale.set(1.2,0.5,1);
+  meshOf(new THREE.SphereGeometry(0.32,10,8), mat('#9ab87a'), g, 1.15, 0.4, 0);
+  for (const [fx,fz] of [[0.6,0.85],[0.6,-0.85],[-0.6,0.75],[-0.6,-0.75]]){ const f = meshOf(new THREE.SphereGeometry(0.3,8,6), mat('#9ab87a'), g, fx, 0.2, fz); f.scale.set(1.4,0.3,0.6); }
+  g.scale.setScalar(s||1); return g;
+}
+function fishMesh(col, s){
+  const f = new THREE.Group();
+  meshOf(new THREE.SphereGeometry(0.3,10,8), mat(col,{roughness:0.4}), f, 0, 0, 0).scale.set(1.6,1,0.5);
+  meshOf(new THREE.ConeGeometry(0.22,0.35,4), mat(col), f, -0.55, 0, 0).rotation.z = Math.PI/2;
+  meshOf(new THREE.SphereGeometry(0.05,6,4), mat('#1a1a2a'), f, 0.32, 0.08, 0.13);
+  f.scale.setScalar(s||1); return f;
+}
+function snowman(){
+  const g = new THREE.Group(), w = mat('#ffffff',{roughness:0.9});
+  meshOf(new THREE.SphereGeometry(1.3,16,12), w, g, 0, 1.2, 0); meshOf(new THREE.SphereGeometry(0.95,16,12), w, g, 0, 3.0, 0); meshOf(new THREE.SphereGeometry(0.7,16,12), w, g, 0, 4.4, 0);
+  meshOf(new THREE.ConeGeometry(0.6,1.2,14), mat('#d9341f'), g, 0, 5.3, 0); meshOf(new THREE.SphereGeometry(0.2,8,6), mat('#ffffff'), g, 0, 5.95, 0);
+  const sash = meshOf(new THREE.TorusGeometry(0.98,0.12,6,24), mat('#3a6ad0'), g, 0, 2.5, 0); sash.rotation.x = Math.PI/2;
+  for (let i=0;i<6;i++){ const a = i/6*Math.PI*2; meshOf(new THREE.BoxGeometry(0.3,0.1,0.1), mat(['#d9341f','#f2c14e','#3f8a5a'][i%3]), g, Math.cos(a)*0.98, 2.5, Math.sin(a)*0.98).rotation.y = -a; }
+  for (const sx of [-1,1]) meshOf(new THREE.SphereGeometry(0.08,8,6), mat('#1a1a2a'), g, sx*0.22, 4.55, 0.6);
+  meshOf(new THREE.ConeGeometry(0.1,0.6,8), mat('#ff8a3a'), g, 0, 4.4, 0.85).rotation.x = Math.PI/2;
+  for (const sx of [-1,1]){ const arm = meshOf(new THREE.CylinderGeometry(0.06,0.06,1.6,6), mat('#6b4a2a'), g, sx*1.4, 3.3, 0); arm.rotation.z = sx*-0.9; }
   return g;
 }
 
@@ -2461,13 +2603,66 @@ const REGION_EGG = {
       for (let i=0;i<4;i++) setTimeout(()=>{ const d = new THREE.Group(); meshOf(new THREE.SphereGeometry(1,12,8), mat('#7f9cb8',{roughness:0.4}), d, 0,0,0).scale.set(2.2,0.6,0.6); meshOf(new THREE.ConeGeometry(0.3,0.9,4), mat('#7f9cb8'), d, 0.2, 0.6, 0);
         const z0 = -70 - i*8, x0 = -40 + i*14; eggAnim(d, (o,tt)=>{ const p = tt/2; o.position.set(x0 + p*16, -1 + Math.sin(p*Math.PI)*7, z0); o.rotation.z = Math.cos(p*Math.PI)*1.1; if (p >= 1 && !o.userData.s){ o.userData.s = 1; burst(V3(x0+16,0,z0), ['#ffffff','#e6f6ff'], 30, 8, 1.6, 2); } return p < 1.02; }); }, 300 + i*700);
       tune([330,392,494,587,494,440,392,330], 0.4, 'triangle', 0.14); } },
-  canada:{ title:'终极彩蛋 · 枫叶旋风', sub:'满天红枫打着旋落下，一队加拿大雁排成 V 字飞过',
-    run(){ rain(['#e0503a','#f2a33a','#c9452e','#ffcf5a'], 280, 32, 6, leafGeo);
-      const flock = new THREE.Group();
-      for (let i=0;i<9;i++){ const b = new THREE.Group(); meshOf(new THREE.SphereGeometry(0.4,8,6), mat('#4a3a30'), b, 0,0,0).scale.set(1.6,0.6,0.6); for (const sz of [-1,1]){ const w = addBox(b, 0.5, 0.05, 1.4, 0, 0, sz*0.7, '#6b5a48'); w.userData.w = sz; }
-        const k = Math.ceil(i/2) * (i%2 ? 1 : -1); b.position.set(-Math.abs(k)*2, 0, k*2); flock.add(b); }
-      eggAnim(flock, (o,tt)=>{ o.position.set(-80 + tt*14, 30, -30); o.children.forEach(b=> b.children.forEach(w=>{ if (w.userData.w) w.rotation.x = w.userData.w*Math.sin(tt*10)*0.6; })); return tt < 12; });
-      tune([262,294,330,392,440,392,330,294,262], 0.4, 'triangle', 0.14); } },
+  quebec:{ title:'终极彩蛋 · 魁北克冬季狂欢节', sub:'芳堤娜城堡亮起所有窗户，雪人 Bonhomme 跳起舞，枫叶和雪花一起落下',
+    run(){ rain(['#e0503a','#f2a33a','#ffffff','#d9341f'], 260, 32, 6, leafGeo);
+      const holder = new THREE.Object3D();
+      eggAnim(holder, (o,tt)=>{ if (LMREF.qWin) LMREF.qWin.emissiveIntensity = Math.min(2.2, tt*1.2) * (tt > 12 ? Math.max(0.07, 13-tt) : 1);
+        if (LMREF.bonhomme){ LMREF.bonhomme.position.y = -0.5 + Math.abs(Math.sin(tt*5))*1.2; LMREF.bonhomme.rotation.y = tt*3; } if (tt >= 13 && LMREF.bonhomme){ LMREF.bonhomme.position.y = -0.5; } return tt < 13; });
+      for (let i=0;i<6;i++) setTimeout(firework, 600 + i*700);
+      tune([392,523,523,587,659,587,523,494,523], 0.32, 'triangle', 0.15); tune([196,0,262,0,196,0,262,0,196], 0.32, 'sine', 0.1); } },
+  altai:{ title:'终极彩蛋 · 阿勒泰转场', sub:'冬不拉弹起来，一群骏马奔过草原，喀纳斯湖变成翡翠色',
+    run(){ const herd = new THREE.Group();
+      for (let i=0;i<14;i++){ const h = quadruped(['#7a4a2c','#2a2420','#c9a06a','#f4efe6'][i%4], rnd(1.1,1.5), {neck:0.85}); h.position.set(-rnd(0,24), -0.5, rnd(-12,12)); h.userData.ph = Math.random()*6; herd.add(h); }
+      eggAnim(herd, (o,tt)=>{ o.position.set(-110 + tt*20, 0, -40); o.children.forEach(h=>{ h.position.y = -0.5 + Math.abs(Math.sin(tt*9 + h.userData.ph))*0.6; h.rotation.z = Math.sin(tt*9 + h.userData.ph)*0.08; }); if (Math.random() < 0.4) spawnFX(steamGeo, '#d9c8a8', V3(o.position.x - 10 + rnd(-10,10), 0, -40 + rnd(-10,10)), {v:V3(-2,1,0), max:1.6, s:2.5, op:0.5}); return tt < 11; });
+      const w = scenery.userData.water;
+      if (w){ const c0 = w.material.color.clone(); const holder = new THREE.Object3D(); eggAnim(holder, (o,tt)=>{ const p = tt < 2 ? tt/2 : tt > 10 ? Math.max(0, 12-tt)/2 : 1; w.material.color.copy(c0).lerp(new THREE.Color('#2fc9a0'), p); return tt < 12; }); }
+      const a = audio(); if (a){ const t0 = a.currentTime; [392,440,392,330,392,440,494,440,392,330,294,330,392].forEach((f,i)=>{ tone(f, t0+i*0.2, 0.25, 'triangle', 0.16); tone(f*1.5, t0+i*0.2+0.1, 0.15, 'triangle', 0.06); }); for (let i=0;i<26;i++) noiseHit(t0 + i*0.1, 0.05, 0.08, 'bandpass', 500 + (i%2)*300); } } },
+  jiuzhai:{ title:'终极彩蛋 · 七彩海子', sub:'所有海子轮流变成七种颜色，瀑布前挂起一道彩虹，经幡哗啦啦飘起来',
+    run(){ const rbw = ['#ff6b6b','#ffa94d','#ffe066','#69db7c','#4dabf7','#9775fa','#f783ac'];
+      const holder = new THREE.Object3D();
+      eggAnim(holder, (o,tt)=>{ (LMREF.pools||[]).forEach((p,i)=>{ if (tt < 12){ p.m.color.set(rbw[Math.floor(tt*2 + i) % 7]); p.m.emissive.copy(p.m.color); p.m.emissiveIntensity = 0.45; } else { p.m.color.copy(p.base); p.m.emissive.copy(p.base); p.m.emissiveIntensity = 0.12; } });
+        (LMREF.flags||[]).forEach((f,i)=> f.rotation.y = Math.sin(tt*8 + i*0.7)*0.9); return tt < 12.2; });
+      const rb = new THREE.Group(); rbw.slice(0,6).forEach((c,i)=> rb.add(new THREE.Mesh(new THREE.TorusGeometry(16 - i*0.9, 0.42, 6, 48, Math.PI), new THREE.MeshBasicMaterial({color:new THREE.Color(c), transparent:true, opacity:0, fog:false, depthWrite:false}))));
+      rb.position.set(-40, -1, -30);
+      eggAnim(rb, (o,tt)=>{ const op = Math.min(0.75, tt*0.4) * (tt > 11 ? Math.max(0, 12-tt) : 1); o.children.forEach(m=> m.material.opacity = op); return tt < 12; });
+      for (let i=0;i<8;i++) setTimeout(()=> burst(V3(-40 + rnd(-8,8), 1, -34), ['#ffffff','#e6f6ff'], 20, 6, 1.6, 2.2), i*300);
+      tune([294,330,370,440,494,440,370,330,294,330], 0.4, 'triangle', 0.14); } },
+  changbai:{ title:'终极彩蛋 · 天池水怪现身！', sub:'天池里探出一只害羞的大水怪，它朝你挥挥手，又慢慢沉回湖里',
+    run(){ const T = LMREF.tianchi; const base = T ? T.position.clone().add(V3(0, 30.7, 0)) : V3(-80, 30, -130);
+      const mon = new THREE.Group(), mm = mat('#6fb8c9',{roughness:0.5});
+      meshOf(new THREE.CylinderGeometry(1.4, 2.2, 9, 14), mm, mon, 0, 4.5, 0);
+      meshOf(new THREE.SphereGeometry(2.6, 18, 14), mm, mon, 0, 10, 0.4);
+      for (const sx of [-1,1]){ meshOf(new THREE.SphereGeometry(0.7,12,10), mat('#ffffff'), mon, sx*1.0, 10.8, 2.4); meshOf(new THREE.SphereGeometry(0.38,10,8), mat('#1a1a2a'), mon, sx*1.0, 10.8, 3.0); meshOf(new THREE.SphereGeometry(0.5,10,8), mat('#ff9fb4'), mon, sx*1.7, 9.6, 2.2).scale.z = 0.4; meshOf(new THREE.ConeGeometry(0.4, 1.2, 8), mat('#4f98a9'), mon, sx*1.2, 12.6, 0).rotation.z = sx*-0.4; }
+      const arm = new THREE.Group(); arm.position.set(2.2, 5, 0.5); mon.add(arm); meshOf(new THREE.CapsuleGeometry(0.5, 2.4, 4, 8), mm, arm, 0.9, 1.4, 0).rotation.z = -0.5;
+      mon.position.copy(base).add(V3(0,-14,0)); 
+      eggAnim(mon, (o,tt)=>{ const up = tt < 3 ? tt/3 : tt > 10 ? Math.max(0, 1-(tt-10)/2.5) : 1; o.position.y = base.y - 14 + up*14; arm.rotation.z = Math.sin(tt*6)*0.6 - 0.2; o.rotation.y = Math.sin(tt*0.8)*0.4; if (tt > 2.6 && tt < 3 ) burst(base.clone(), ['#e6f6ff','#ffffff'], 6, 10, 2, 4); return tt < 12.6; });
+      rain(['#ffffff','#eef6ff'], 200, 30, 6);
+      if (LMREF.spring) for (let i=0;i<20;i++) setTimeout(()=> spawnFX(steamGeo, '#ffffff', LMREF.spring.position.clone().add(V3(rnd(-2,2), 0.4, rnd(-2,2))), {v:V3(rnd(-0.3,0.3), 1.6, rnd(-0.3,0.3)), max:3, grow:3, s:2, op:0.6}), i*200);
+      tune([220,262,247,220,196,220,262,330], 0.45, 'sine', 0.16); tune([110,0,98,0,110,0,131], 0.45, 'triangle', 0.1); } },
+  savanna:{ title:'终极彩蛋 · 动物大迁徙', sub:'夕阳把草原染成金色，成群的斑马和角马从远方奔腾而过',
+    run(){ const herd = new THREE.Group();
+      for (let i=0;i<34;i++){ const z = i%3 === 0; const a = z ? striped('#f4f4f0', '#1a1a1a', rnd(0.9,1.1)) : quadruped('#5a5a60', rnd(0.8,1.05)); a.position.set(-rnd(0,40), -0.5, rnd(-14,14)); a.userData.ph = Math.random()*6; herd.add(a); }
+      eggAnim(herd, (o,tt)=>{ o.position.set(-120 + tt*18, 0, -60); o.children.forEach(h=>{ h.position.y = -0.5 + Math.abs(Math.sin(tt*8 + h.userData.ph))*0.5; }); if (Math.random() < 0.6) spawnFX(steamGeo, '#d9b880', V3(o.position.x - 20 + rnd(-20,20), 0.5, -60 + rnd(-14,14)), {v:V3(-3,1.5,0), max:2, s:3.5, op:0.45}); return tt < 13; });
+      const old = [skyUniforms.topColor.value.clone(), skyUniforms.bottomColor.value.clone()], holder = new THREE.Object3D();
+      eggAnim(holder, (o,tt)=>{ const p = tt < 1.5 ? tt/1.5 : tt > 11 ? Math.max(0, 1-(tt-11)/1.5) : 1; skyUniforms.topColor.value.copy(old[0]).lerp(new THREE.Color('#c9603a'), p); skyUniforms.bottomColor.value.copy(old[1]).lerp(new THREE.Color('#ffc46b'), p); if (tt >= 12.5) applyLighting(); return tt < 12.5; });
+      const a = audio(); if (a){ const t0 = a.currentTime; for (let i=0;i<32;i++){ tone(i%4===0 ? 98 : 147, t0+i*0.25, 0.18, 'triangle', i%4===0 ? 0.2 : 0.1); if (i%2) noiseHit(t0+i*0.25, 0.05, 0.08, 'bandpass', 900); } tune([392,440,523,440,392,330,392], 0.5, 'sine', 0.1, 1); } } },
+  hainan:{ title:'终极彩蛋 · 潜入南海', sub:'扑通一下潜进海底：彩色鱼群绕着你游，小海龟慢慢划过，气泡往上冒',
+    run(){ const uw = document.getElementById('underwater'); uw.classList.add('show');
+      scene.fog = new THREE.Fog(new THREE.Color('#1b6d9a'), 4, 90);
+      splash(camera.position.clone().add(V3(0,-2,0)), 30);
+      const sea = new THREE.Group(); const cols = ['#ff9a5a','#ffe066','#4dabf7','#ff7f9e','#c39bff','#63e6be','#ffffff'];
+      for (let s=0;s<4;s++) for (let i=0;i<12;i++){ const f = fishMesh(cols[(s*3+i)%7], rnd(0.8,1.4)); f.userData = {r:rnd(5,10)+s*2.5, h:rnd(-3,3), sp:(s%2 ? 1 : -1)*rnd(0.35,0.6), ph:i/12*Math.PI*2 + rnd(-0.1,0.1)}; sea.add(f); }
+      const tur = turtle(1.3); tur.userData = {turtle:1}; sea.add(tur);
+      for (let i=0;i<5;i++){ const j = new THREE.Mesh(new THREE.SphereGeometry(0.7,14,10,0,Math.PI*2,0,Math.PI/2), new THREE.MeshStandardMaterial({color:0xf2b8ff, transparent:true, opacity:0.55, emissive:new THREE.Color('#e08aff'), emissiveIntensity:0.4})); j.userData = {jelly:1, x:rnd(-9,9), z:rnd(-9,9), ph:Math.random()*6}; sea.add(j); }
+      eggAnim(sea, (o,tt)=>{ o.position.copy(camera.position);
+        o.children.forEach(c=>{ const u = c.userData;
+          if (u.turtle){ c.position.set(-14 + tt*2.2, -2 + Math.sin(tt)*0.6, -6); c.rotation.y = 0; c.rotation.z = Math.sin(tt*2)*0.1; }
+          else if (u.jelly){ c.position.set(u.x, Math.sin(tt*0.9 + u.ph)*2, u.z); c.scale.set(1, 0.8 + 0.2*Math.sin(tt*3 + u.ph), 1); }
+          else { const a = u.ph + tt*u.sp; c.position.set(Math.cos(a)*u.r, u.h + Math.sin(tt*2 + u.ph)*0.4, Math.sin(a)*u.r); c.rotation.y = -a + (u.sp > 0 ? -Math.PI/2 : Math.PI/2); } });
+        if (Math.random() < 0.5) spawnFX(steamGeo, '#e6f6ff', camera.position.clone().add(V3(rnd(-6,6), -4, rnd(-6,6))), {v:V3(rnd(-0.2,0.2), rnd(1.5,2.6), rnd(-0.2,0.2)), max:3, s:rnd(0.3,0.7), op:0.7, fog:false});
+        if (tt > 14 && !o.userData.out){ o.userData.out = 1; uw.classList.remove('show'); applyLighting(); }
+        return tt < 15; });
+      tune([262,330,392,523,392,330,294,349,440,523], 0.5, 'sine', 0.12); tune([131,0,165,0,196,0,147,0,175], 0.5, 'triangle', 0.08); } },
   bali:{ title:'终极彩蛋 · 海神庙的萤火之夜', sub:'甘美兰的乐声里，成千上万只萤火虫从稻田飞起',
     run(){ if (!state.night) timeBtn.click();
       for (let i=0;i<300;i++) setTimeout(()=> spawnFX(dotGeo, ['#d8ff8a','#fff1a8','#a8ffcf'][i%3], V3(rnd(-50,50), rnd(0,3), rnd(-50,50)), {v:V3(rnd(-0.8,0.8), rnd(0.6,1.6), rnd(-0.8,0.8)), max:9, s:rnd(1.2,2.2), op:1, face:true, fog:false}), i*20);
@@ -2579,13 +2774,81 @@ const REGION_LM = {
     lm(g, ch, 'church', '蓝顶教堂', '蓝顶白墙的配色，正好是希腊国旗的颜色。', 34, -16, 'glow');
     lm(g, quadruped('#8a8278', 0.9, {neck:0.7}), 'donkey', '小毛驴', '圣托里尼的悬崖小镇台阶很多，以前货物都是靠毛驴一级一级驮上去的。', -28, 20, 'hop');
   },
-  canada(g){
-    lm(g, quadruped('#5a3e2c', 1.6, {antlers:true, neck:0.7}), 'moose', '驼鹿', '驼鹿是世界上最大的鹿，雄鹿的角像两只张开的大手掌。', 32, 10, 'hop');
+  quebec(g){
+    const ca = new THREE.Group(); const wall = mat('#a8735a',{roughness:0.95}), cu = mat('#5f9e8a',{roughness:0.6, flatShading:true});
+    LMREF.qWin = new THREE.MeshStandardMaterial({color:0xfff1c8, emissive:new THREE.Color('#ffc46b'), emissiveIntensity:0.15});
+    addBox(ca, 16, 12, 9, 0, 6, 0, wall); addBox(ca, 6, 22, 6, 0, 11, 0, wall);
+    const roof = meshOf(new THREE.ConeGeometry(5, 9, 4), cu, ca, 0, 26.5, 0); roof.rotation.y = Math.PI/4;
+    const r2 = addBox(ca, 16.4, 0.4, 6.5, 0, 14, -2.2, cu); r2.rotation.x = 0.9; const r3 = addBox(ca, 16.4, 0.4, 6.5, 0, 14, 2.2, cu); r3.rotation.x = -0.9;
+    for (const [tx,tz] of [[-8,-4.5],[8,-4.5],[-8,4.5],[8,4.5]]){ meshOf(new THREE.CylinderGeometry(1.6,1.6,15,12), wall, ca, tx, 7.5, tz); meshOf(new THREE.ConeGeometry(2.0, 5, 12), cu, ca, tx, 17.5, tz); }
+    for (let r=0;r<4;r++) for (let c=0;c<6;c++) addBox(ca, 0.9, 1.2, 0.1, -5.5+c*2.2, 2.4+r*2.6, 4.55, LMREF.qWin);
+    for (let r=0;r<5;r++) addBox(ca, 1.0, 1.3, 0.1, 0, 13+r*2.2, 3.05, LMREF.qWin);
+    LMREF.castle = lm(g, ca, 'castle', '芳堤娜城堡', '魁北克城的芳堤娜城堡是一座古堡酒店，绿色的铜屋顶据说是世界上被拍照最多的酒店。', 0, -86, 'glow');
     const sh = new THREE.Group(); addBox(sh, 4, 2.4, 3.2, 0, 1.2, 0, '#8a5a3a'); const r = meshOf(new THREE.ConeGeometry(3.2, 1.6, 4), mat('#c9452e',{flatShading:true}), sh, 0, 3.2, 0); r.rotation.y = Math.PI/4;
-    for (let i=0;i<4;i++){ const b = meshOf(new THREE.CylinderGeometry(0.3,0.3,0.6,10), mat('#d9a25a'), sh, -1.5+i, 0.3, 1.9); }
+    for (let i=0;i<4;i++) meshOf(new THREE.CylinderGeometry(0.3,0.3,0.6,10), mat('#d9a25a'), sh, -1.5+i, 0.3, 1.9);
     meshOf(new THREE.CylinderGeometry(0.2,0.2,1.4,8), mat('#9a9a9a'), sh, 1.2, 3.6, -0.6);
-    lm(g, sh, 'sugar', '枫糖小屋', '大约 40 升枫树汁才能熬出 1 升枫糖浆。', -36, -26, 'glow');
-    const cn = boat('#c9452e', 5, {}); cn.scale.set(1,0.6,0.6); lm(g, cn, 'canoe', '红色独木舟', '独木舟最早是原住民的交通工具，可以在湖泊和河流之间扛着走。', -30, 20, 'wobble');
+    lm(g, sh, 'sugar', '枫糖小屋', '魁北克生产了全世界七成左右的枫糖浆，春天大家会去枫糖小屋吃浇了枫糖的雪地太妃糖。', -36, -26, 'glow');
+    LMREF.bonhomme = lm(g, snowman(), 'bonhomme', '狂欢节雪人', '魁北克冬季狂欢节的吉祥物叫 Bonhomme，戴红帽子、系彩色腰带，是一个会跳舞的雪人。', 32, 12, 'hop');
+  },
+  altai(g){
+    lm(g, yurt('#c9452e'), 'yurt', '哈萨克毡房', '毡房可以拆开放到马背上搬家，一家人跟着季节在草场之间转场放牧。', 32, 12, 'glow');
+    lm(g, quadruped('#7a4a2c', 1.4, {neck:0.85}), 'horse', '阿勒泰骏马', '阿勒泰的牧民从小在马背上长大，这里也被认为是人类滑雪的起源地之一。', -32, 18, 'hop');
+    lm(g, logCabin('#3f6b4a'), 'cabin', '禾木小木屋', '禾木村的小木屋用整根松木搭成，冬天屋顶盖着厚雪，炊烟升起来像童话一样。', -36, -28, 'glow');
+  },
+  jiuzhai(g){
+    const pool = new THREE.Group();
+    const cv = document.createElement('canvas'); cv.width = 128; cv.height = 128; const cx = cv.getContext('2d');
+    const gr = cx.createRadialGradient(64,64,6,64,64,64); ['#f2e86a','#5fd3a8','#3fc1c9','#2a6fbf','#3a3a8e'].forEach((c,i)=> gr.addColorStop(i/4, c)); cx.fillStyle = gr; cx.fillRect(0,0,128,128);
+    const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(7, 32), new THREE.MeshStandardMaterial({map:tx, roughness:0.08, emissive:new THREE.Color('#3fc1c9'), emissiveIntensity:0.1})); disc.rotation.x = -Math.PI/2; disc.position.y = 0.04; pool.add(disc);
+    for (let i=0;i<4;i++){ const lg = meshOf(new THREE.CylinderGeometry(0.2,0.2,4,8), mat('#8a6a4a'), pool, rnd(-3,3), 0.1, rnd(-3,3)); lg.rotation.z = Math.PI/2; lg.rotation.y = rnd(0,3); }
+    lm(g, pool, 'pool', '五花海', '五花海的湖底有钙华和水藻，同一片湖水能同时呈现黄、绿、蓝好几种颜色。', 34, -30, 'glow');
+    const wf = new THREE.Group();
+    addBox(wf, 22, 7, 4, 0, 3.5, -2, '#6f8a6a', {flatShading:true});
+    for (let i=0;i<9;i++){ const pl = meshOf(new THREE.PlaneGeometry(2.0, 7), new THREE.MeshStandardMaterial({color:0xf4fbff, transparent:true, opacity:0.75, emissive:new THREE.Color('#d8f0ff'), emissiveIntensity:0.3, side:THREE.DoubleSide}), wf, -9+i*2.25, 3.4, 0.05); }
+    const wp = new THREE.Mesh(new THREE.CircleGeometry(9, 28), mat('#5fd3c8',{roughness:0.05})); wp.rotation.x = -Math.PI/2; wp.position.set(0, 0.05, 6); wf.add(wp);
+    LMREF.fall = lm(g, wf, 'fall', '诺日朗瀑布', '诺日朗瀑布宽 300 多米，是中国最宽的高山钙华瀑布，《西游记》片尾就在这里取景。', -40, -40, 'glow');
+    const pf = new THREE.Group();
+    addBox(pf, 0.12, 5, 0.12, -3, 2.5, 0, '#8a6a4a'); addBox(pf, 0.12, 5, 0.12, 3, 2.5, 0, '#8a6a4a');
+    const fc = ['#3a6ad0','#ffffff','#d9341f','#3f8a5a','#f2c14e'];
+    LMREF.flags = [];
+    for (let row=0; row<3; row++) for (let i=0;i<10;i++){ const f = meshOf(new THREE.PlaneGeometry(0.5,0.6), mat(fc[i%5],{side:THREE.DoubleSide}), pf, -2.7+i*0.6, 4.6-row*0.9 - Math.sin(i/9*Math.PI)*0.4, 0); LMREF.flags.push(f); }
+    const wheel = new THREE.Group(); meshOf(new THREE.CylinderGeometry(0.6,0.6,1.3,16), mat('#e0a235',{metalness:0.6, roughness:0.35}), wheel, 0, 0, 0); meshOf(new THREE.CylinderGeometry(0.62,0.62,0.18,16), mat('#d9341f'), wheel, 0, 0.3, 0);
+    wheel.position.set(0, 1.2, 1.2); pf.add(wheel); addBox(pf, 0.1, 1.2, 0.1, 0, 0.5, 1.2, '#5a3a28');
+    const hitF = new THREE.Mesh(new THREE.BoxGeometry(6.4, 5, 2.4), new THREE.MeshBasicMaterial({transparent:true, opacity:0, depthWrite:false})); hitF.position.set(0, 2.5, 0.6); pf.add(hitF);
+    lm(g, pf, 'flag', '经幡与转经筒', '风吹过一次经幡，转经筒转一圈，藏族人相信就把祝福传递了一遍。', -30, 22, 'spin');
+  },
+  changbai(g){
+    const vol = new THREE.Group();
+    meshOf(new THREE.CylinderGeometry(14, 48, 30, 14), mat('#7a8290',{flatShading:true, roughness:1}), vol, 0, 15, 0);
+    meshOf(new THREE.CylinderGeometry(14.5, 22, 7, 14), mat('#fbfdff',{flatShading:true, roughness:1}), vol, 0, 27, 0);
+    LMREF.lakeMat = new THREE.MeshStandardMaterial({color:0x2a7fd0, roughness:0.05, metalness:0.3, emissive:new THREE.Color('#2a7fd0'), emissiveIntensity:0.15});
+    const lake = new THREE.Mesh(new THREE.CircleGeometry(11, 28), LMREF.lakeMat); lake.rotation.x = -Math.PI/2; lake.position.y = 30.2; vol.add(lake);
+    LMREF.tianchi = lm(g, vol, 'tianchi', '长白山天池', '天池是火山口积水形成的湖，海拔 2000 多米，水深 300 多米，传说里面住着「水怪」。', -80, -130, 'glow');
+    lm(g, striped('#e08a3a', '#2a1a14', 1.4), 'tiger', '东北虎', '东北虎是体型最大的老虎，额头上的花纹像一个「王」字。', 32, 12, 'hop');
+    const sp = new THREE.Group(); meshOf(new THREE.CylinderGeometry(0.4, 0.8, 1.6, 10), mat('#9a9a9a',{roughness:0.8}), sp, 0, 0.6, 0);
+    const water = meshOf(new THREE.CylinderGeometry(3.2,3.2,0.2,20), mat('#7fd6f0',{roughness:0.05, emissive:new THREE.Color('#7fd6f0'), emissiveIntensity:0.15}), sp, 0, 0.1, 0);
+    for (let i=0;i<10;i++){ const a = i/10*Math.PI*2; meshOf(new THREE.IcosahedronGeometry(0.7,0), mat('#8a8278',{flatShading:true}), sp, Math.cos(a)*3.4, 0.3, Math.sin(a)*3.4); }
+    LMREF.spring = lm(g, sp, 'spring', '聚龙温泉', '长白山的温泉水温能到 80 多度，冬天在雪地里还能煮熟温泉鸡蛋。', -32, 20, 'glow');
+  },
+  savanna(g){
+    lm(g, giraffe(1.5), 'giraffe', '长颈鹿', '长颈鹿的脖子虽然长，但和人一样只有 7 节颈椎，舌头是深紫色的。', 32, 10, 'hop');
+    lm(g, elephant(1.4), 'elephant', '非洲象', '非洲象是陆地上最大的动物，大耳朵像扇子，能帮它散热。', -36, -26, 'wobble');
+    const pr = new THREE.Group(); const rm = mat('#a8906a',{flatShading:true, roughness:1});
+    meshOf(new THREE.IcosahedronGeometry(4,0), rm, pr, 0, 2, 0).scale.set(1.4,0.7,1); const top = meshOf(new THREE.BoxGeometry(7, 1, 3), rm, pr, 2.5, 4.4, 0); top.rotation.z = 0.25;
+    const ln = lion(1.0); ln.position.set(4.5, 5.2, 0); pr.add(ln);
+    lm(g, pr, 'rock', '狮子岩', '狮群里通常由母狮负责打猎，公狮负责保护领地，一声吼叫 8 公里外都能听见。', -30, 24, 'wobble');
+  },
+  hainan(g){
+    const pt = new THREE.Group(); let y = 0;
+    for (let i=0;i<9;i++){ meshOf(new THREE.CylinderGeometry(0.22,0.28,0.9,7), mat('#8a6a4a'), pt, Math.sin(i*0.3)*0.4, y+0.45, 0); y += 0.85; }
+    for (let i=0;i<8;i++){ const a = i*(Math.PI*2/8); const leaf = meshOf(new THREE.ConeGeometry(0.4,3.4,4), mat('#4f9a45',{flatShading:true}), pt, Math.sin(2.7)*0.4 + Math.cos(a)*1.5, y+0.4, Math.sin(a)*1.5); leaf.rotation.order = 'YXZ'; leaf.rotation.y = -a; leaf.rotation.z = -(Math.PI/2-0.5); }
+    for (let i=0;i<4;i++) meshOf(new THREE.SphereGeometry(0.32,10,8), mat('#6b8a3a'), pt, Math.sin(2.7)*0.4 + Math.cos(i*1.6)*0.45, y-0.3, Math.sin(i*1.6)*0.45);
+    LMREF.palm = lm(g, pt, 'coconut', '大椰子树', '海南的椰子树能长到 20 多米高，一棵树一年能结一百多个椰子。', 32, 10, 'wobble');
+    lm(g, turtle(1.4), 'turtle', '小海龟', '绿海龟会游回自己出生的沙滩产卵，海南西沙群岛是它们的重要家园。', -28, 18, 'hop');
+    const bt = boat('#f4f4f0', 8, {}); addBox(bt, 2.4, 1.6, 2, 0, 1.6, 0, '#ffffff'); addBox(bt, 2.5, 0.2, 2.1, 0, 2.5, 0, '#2f6f9e');
+    const flag = new THREE.Group(); addBox(flag, 0.06, 2, 0.06, 0, 1, 0, '#cccccc'); addBox(flag, 0.04, 0.7, 1.0, 0, 1.6, 0.5, '#d9341f'); const dg = addBox(flag, 0.05, 0.14, 1.1, 0, 1.6, 0.5, '#ffffff'); dg.rotation.x = 0.6; flag.position.set(-3, 0.8, 0); bt.add(flag);
+    bt.position.y = -0.9; lm(g, bt, 'diveboat', '潜水船', '船上插的红底白斜杠旗叫潜水旗，意思是「水下有潜水员，请慢行」。', 0, -56, 'wobble');
   },
   bali(g){
     const gate = new THREE.Group(); for (const sx of [-1,1]){ for (let i=0;i<5;i++) addBox(gate, 1.6-i*0.22, 1.6, 1.4, sx*1.6, 0.8+i*1.6, 0, ['#a8573a','#9a8a7a'][i%2]); }
@@ -2738,12 +3001,60 @@ const REGIONS = {
         hb.position.set(Math.cos(a)*r,-2.2,Math.sin(a)*r); hb.rotation.y = Math.random()*3; g.add(hb);
       }
     } },
-  canada: { label:'加拿大枫林', groundR:260, water:false,
-    day:{skyTop:'#6f9fd0',skyBot:'#e9eef3',fog:'#e0e7ec',ground:'#728a5c',water:'#3d6c7c',sun:'#ffeccd',sunI:2.6,hemi:0.95,hemiSky:'#dbebf5',hemiGnd:'#77855f'},
+  quebec: { label:'加拿大魁北克', groundR:72, water:true,
+    day:{skyTop:'#6f9fd0',skyBot:'#eaeff4',fog:'#e1e8ee',ground:'#728a5c',water:'#3d6c7c',sun:'#ffeccd',sunI:2.6,hemi:0.95,hemiSky:'#dbebf5',hemiGnd:'#77855f'},
     night:{skyTop:'#050a16',skyBot:'#101d2e',fog:'#08111b',ground:'#2a3126',water:'#122830',sun:'#8fb0cc',sunI:0.22,hemi:0.3,hemiSky:'#1e3244',hemiGnd:'#20261e'},
     props(g,sea){
-      ringScatter(70,14,110,(x,z,s,i)=> i%3===0 ? pine(g,x,z,s,sea) : broad(g,x,z,s,sea, sea.snow>0.5 ? undefined : ['#e0a24a','#c9702f','#d9a24a','#b5512c']));
-      for (let i=0;i<7;i++){ const a=i*(Math.PI*2/7)+0.6; mountain(g,Math.cos(a)*(200+rnd(0,90)),Math.sin(a)*(200+rnd(0,90)),80+rnd(0,50),90+rnd(0,70),'#7c8fa0','#f2f6f8'); }
+      ringScatter(56,26,66,(x,z,s,i)=> i%4===0 ? pine(g,x,z,s,sea) : mapleTree(g,x,z,s,sea));
+      const roofs = ['#3f8a5a','#c9452e','#2f6f9e','#e0a235','#5a3a28','#b8483a'];
+      for (let i=0;i<10;i++){ const a = i/10*Math.PI*2 + 0.25, r = 60 + rnd(0,8); if (Math.abs(Math.cos(a)*r) < 30 && Math.sin(a)*r > -30 && Math.sin(a)*r < 26) continue; oldHouse(g, Math.cos(a)*r, Math.sin(a)*r, roofs[i%roofs.length], ['#d9cdb5','#c9b9a0','#e8dfcf'][i%3], -a - Math.PI/2); }
+      for (let i=0;i<6;i++){ const a=i*(Math.PI*2/6)+0.6; mountain(g,Math.cos(a)*(230+rnd(0,80)),Math.sin(a)*(230+rnd(0,80)),90+rnd(0,40),70+rnd(0,40),'#7c8fa0',sea.snow>0.5 ? '#f2f6f8' : null); }
+    } },
+  altai: { label:'新疆阿勒泰', groundR:72, water:true,
+    day:{skyTop:'#5f9fe0',skyBot:'#e8f1f6',fog:'#dfeaf1',ground:'#86a06a',water:'#3f9fa0',sun:'#fff3dc',sunI:2.8,hemi:1.0,hemiSky:'#d6e8f6',hemiGnd:'#7f9462'},
+    night:{skyTop:'#040a18',skyBot:'#122238',fog:'#0a1424',ground:'#28321f',water:'#10302e',sun:'#8fb0cc',sunI:0.22,hemi:0.3,hemiSky:'#1e3448',hemiGnd:'#1f261a'},
+    props(g,sea){
+      ringScatter(70,26,68,(x,z,s,i)=> i%2 ? birch(g,x,z,s,sea) : pine(g,x,z,s,sea));
+      for (let i=0;i<9;i++){ const a=i*(Math.PI*2/9)+0.3; mountain(g,Math.cos(a)*(210+rnd(0,70)),Math.sin(a)*(210+rnd(0,70)),90+rnd(0,40),150+rnd(0,80),'#7f93a8','#fbfdff'); }
+    } },
+  jiuzhai: { label:'四川九寨沟', groundR:300, water:false,
+    day:{skyTop:'#6aa8dc',skyBot:'#eaf4f2',fog:'#dfece9',ground:'#6f8f56',water:'#3fc1c9',sun:'#fff3dc',sunI:2.6,hemi:1.0,hemiSky:'#d8ecef',hemiGnd:'#6f8a52'},
+    night:{skyTop:'#050c18',skyBot:'#122630',fog:'#0a161c',ground:'#22301f',water:'#123c40',sun:'#8fb3c0',sunI:0.22,hemi:0.3,hemiSky:'#1e363c',hemiGnd:'#1c2a1a'},
+    props(g,sea){
+      LMREF.pools = [];
+      const pc = ['#3fc1c9','#2a9dbf','#64dfdf','#48bfe3','#5fd3a8','#7fd6f0'];
+      for (let i=0;i<9;i++){ const a = i/9*Math.PI*2 + 0.4, r = rnd(32,60), x = Math.cos(a)*r, z = Math.sin(a)*r; if (Math.abs(x) < 26 && z > -28 && z < 24) continue;
+        const pm = new THREE.MeshStandardMaterial({color:new THREE.Color(pc[i%6]), roughness:0.08, metalness:0.2, emissive:new THREE.Color(pc[i%6]), emissiveIntensity:0.12});
+        const pool = new THREE.Mesh(new THREE.CircleGeometry(rnd(5,9), 28), pm); pool.rotation.x = -Math.PI/2; pool.position.set(x, -0.47, z); pool.scale.y = rnd(0.6,1); g.add(pool);
+        LMREF.pools.push({m:pm, base:new THREE.Color(pc[i%6])}); }
+      ringScatter(70,26,90,(x,z,s,i)=> i%3===0 ? mapleTree(g,x,z,s*0.9,sea) : pine(g,x,z,s,sea));
+      for (let i=0;i<8;i++){ const a=i*(Math.PI*2/8)+0.5; mountain(g,Math.cos(a)*(200+rnd(0,80)),Math.sin(a)*(200+rnd(0,80)),80+rnd(0,40),140+rnd(0,80),'#6f8a6a','#f6f7fa'); }
+    } },
+  changbai: { label:'吉林长白山', groundR:300, water:false,
+    day:{skyTop:'#6f9fd0',skyBot:'#eef3f7',fog:'#e4ecf2',ground:'#9fb0a0',water:'#3f7fb0',sun:'#fff6e8',sunI:2.6,hemi:1.05,hemiSky:'#dceaf5',hemiGnd:'#a9b8b0'},
+    night:{skyTop:'#040a18',skyBot:'#14223a',fog:'#0b1424',ground:'#2e3638',water:'#122838',sun:'#8fb0cc',sunI:0.24,hemi:0.32,hemiSky:'#22344c',hemiGnd:'#262e30'},
+    props(g,sea){
+      ringScatter(80,26,96,(x,z,s,i)=> i%3===0 ? beautyPine(g,x,z,s,sea) : frostTree(g,x,z,s,sea));
+      for (let i=0;i<7;i++){ const a=i*(Math.PI*2/7)+0.9; mountain(g,Math.cos(a)*(220+rnd(0,70)),Math.sin(a)*(220+rnd(0,70)),90+rnd(0,40),110+rnd(0,60),'#8a9aa8','#fbfdff'); }
+    } },
+  savanna: { label:'非洲大草原', groundR:300, water:false,
+    day:{skyTop:'#e0a85a',skyBot:'#fbe6c4',fog:'#f2dcb4',ground:'#c9b06a',water:'#7a9a8a',sun:'#ffe2b0',sunI:3.0,hemi:1.0,hemiSky:'#f6dcb0',hemiGnd:'#b8a060'},
+    night:{skyTop:'#0a0818',skyBot:'#2a1e2a',fog:'#18121c',ground:'#3a3220',water:'#1c2a26',sun:'#c9a98a',sunI:0.22,hemi:0.3,hemiSky:'#3a2c44',hemiGnd:'#2a2418'},
+    props(g,sea){
+      ringScatter(26,26,120,(x,z,s)=> acacia(g,x,z,s*1.3));
+      ringScatter(90,24,90,(x,z,s)=> grassTuft(g,x,z,s*1.4, sea.snow > 0.5 ? '#d9d4c0' : state.season === 'spring' ? '#9fb85a' : '#c9b06a'));
+      ringScatter(10,30,80,(x,z,s)=> rock(g,x,z,0.8+s,'#a8906a'));
+      mountain(g, 60, -320, 170, 110, '#8a7a6a', '#fbfdff');
+      for (let i=0;i<5;i++){ const a = i/5*Math.PI*2 + 1.2; mountain(g,Math.cos(a)*280,Math.sin(a)*280,110,40,'#b89a6a',null); }
+    } },
+  hainan: { label:'海南潜水', groundR:44, water:true, waterOp:0.62,
+    day:{skyTop:'#3fa9e0',skyBot:'#e6f6fb',fog:'#dcf0f6',ground:'#efdcae',water:'#1fb8c9',sun:'#fff8e0',sunI:3.0,hemi:1.05,hemiSky:'#d8f0f6',hemiGnd:'#e0caa0'},
+    night:{skyTop:'#030c1a',skyBot:'#0c2632',fog:'#06141c',ground:'#3a3424',water:'#0c3a44',sun:'#8fbfcb',sunI:0.22,hemi:0.3,hemiSky:'#173a44',hemiGnd:'#2a261a'},
+    props(g,sea){
+      ringScatter(34,26,42,(x,z,s)=> palm(g,x,z,s*1.1));
+      const bed = new THREE.Mesh(new THREE.CircleGeometry(160, 48), mat('#d9c08a',{roughness:1})); bed.rotation.x = -Math.PI/2; bed.position.y = -3.2; g.add(bed);
+      for (let i=0;i<70;i++){ const a = Math.random()*Math.PI*2, r = rnd(46, 95); coral(g, Math.cos(a)*r, -3.2, Math.sin(a)*r, rnd(1.2,2.4)); }
+      for (let i=0;i<4;i++){ const a = i/4*Math.PI*2 + 0.7; mountain(g,Math.cos(a)*300,Math.sin(a)*300,90,40,'#5f8a5a',null); }
     } },
   moscow: { label:'俄罗斯莫斯科', groundR:300, water:false,
     day:{skyTop:'#8fa7c4',skyBot:'#eef0f3',fog:'#e3e7ec',ground:'#b9c2b0',water:'#4d6a80',sun:'#fff3e2',sunI:2.3,hemi:1.0,hemiSky:'#dfe6ef',hemiGnd:'#a9b3a0'},
@@ -2797,7 +3108,8 @@ function buildScenery(){
   scenery.clear();
   const R = REGIONS[state.region], sea = SEASONS[state.season], pal = state.night ? R.night : R.day;
   groundDisc(scenery, R.groundR, mixHex(pal.ground, state.night ? mixHex(sea.tint,'#1a2230',0.65) : sea.tint, sea.mix));
-  if (R.water) waterRing(scenery, R.groundR, pal.water);
+  scenery.userData.water = null;
+  if (R.water) waterRing(scenery, R.groundR, pal.water, R.waterOp);
   R.props(scenery, sea);
   placeLandmarks();
   buildParticles(sea);
@@ -3408,24 +3720,83 @@ function autoTitle(){
   if (state.night) return '月亮饼妙妙屋的夜晚';
   return '在月亮饼妙妙屋的一天';
 }
+const NO_LINE_START = '，。、；：！？）》」』】—…·,.;:!?)';
 function wrapText(x, text, maxW){
   const lines = []; let cur = '';
-  for (const ch of text){ if (x.measureText(cur + ch).width > maxW && cur){ lines.push(cur); cur = ch; } else cur += ch; }
+  for (const ch of text){
+    if (x.measureText(cur + ch).width > maxW && cur){
+      /* 标点不放在行首：把上一行最后一个字带下来 */
+      if (NO_LINE_START.includes(ch) && cur.length > 1){ lines.push(cur.slice(0,-1)); cur = cur.slice(-1) + ch; }
+      else { lines.push(cur); cur = ch; }
+    } else cur += ch;
+  }
   if (cur) lines.push(cur); return lines;
 }
+/* 把一段文字限制在 maxLines 行内，超出的最后一行用「…」收尾 */
+function clampLines(x, text, maxW, maxLines){
+  const lines = wrapText(x, text, maxW);
+  if (lines.length <= maxLines) return lines;
+  const out = lines.slice(0, maxLines);
+  let last = out[maxLines-1];
+  while (last.length && x.measureText(last + '…').width > maxW) last = last.slice(0, -1);
+  out[maxLines-1] = last + '…';
+  return out;
+}
 function buildCard(shot, title){
-  const W = 1080, H = 1500, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
-  const x = cv.getContext('2d');
+  const W = 1080, PADX = 90, TEXTW = W - PADX*2;
   const FONT = '"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif';
   const HAND = '"Kaiti SC","STKaiti","KaiTi","楷体",' + FONT;
+
+  /* ---- 1. 先排版：量好每一块的高度，再决定卡片总高度 ---- */
+  const mc = document.createElement('canvas').getContext('2d');
+  /* 标题：放不下就缩小字号，最多两行 */
+  let titleSize = 54, titleLines;
+  for (;;){ mc.font = '600 ' + titleSize + 'px ' + HAND; titleLines = clampLines(mc, title, 820, 2); if (titleLines.length === 1 || titleSize <= 40) break; titleSize -= 4; }
+  const titleExtra = (titleLines.length - 1) * (titleSize + 10);
+  /* 标签：一行放不下自动换行 */
+  const R = REGIONS[state.region], S = SEASONS[state.season];
+  const tags = [R.label, S.label + '天', state.night ? '夜晚' : '白天'];
+  const wi = whereIdx(); if (wi >= 0) tags.push(['1F 客厅','2F 客房','3F 卧室','后院泳池','前院花园'][wi]);
+  if (state.party) tags.push('派对中');
+  if (curTheme) tags.push(curTheme.name);
+  mc.font = '30px ' + FONT;
+  const tagRows = [[]]; let rowW = 0;
+  const TAGW = TEXTW - 90;   /* 右侧留出星星装饰的位置 */
+  tags.forEach(tg=>{ const w = mc.measureText(tg).width + 44; if (rowW + w > TAGW && tagRows[tagRows.length-1].length){ tagRows.push([]); rowW = 0; } tagRows[tagRows.length-1].push({tg, w}); rowW += w + 14; });
+  /* 今日小事：每条最多两行 */
+  mc.font = '29px ' + FONT;
+  const recent = moments.slice(-3).reverse().map(m=> m.m);
+  if (!recent.length) recent.push('推开门，欢迎回家');
+  const momentLines = [];
+  recent.forEach(m=> clampLines(mc, '· ' + m, TEXTW, 2).forEach(l=> momentLines.push(l)));
+  /* 页脚：左右两段放不下就上下排 */
+  mc.font = '26px ' + FONT;
+  const fr = state.friends ? '和 ' + FRIENDS.map(f=> f.name).join('、') + ' 一起' : '';
+  const footL = clampLines(mc, (fr ? fr + '  ·  ' : '') + '小幸福 ' + found.size + ' 个', TEXTW, 2);
+  const footR = '月亮饼妙妙屋 · 记忆卡片 No.' + String(memoCount + 1).padStart(3,'0');
+  const footSameRow = footL.length === 1 && mc.measureText(footL[0]).width + mc.measureText(footR).width + 60 <= TEXTW;
+  const footLines = footSameRow ? 1 : footL.length + 1;
+
+  const polaroidBottom = 1110 + titleExtra;
+  const tagTop = polaroidBottom + 60;
+  const tagsBottom = tagTop + tagRows.length*68;
+  const headY = tagsBottom + 34;
+  const firstLineY = headY + 50;
+  const textBottom = firstLineY + (momentLines.length - 1)*42;
+  const footTop = textBottom + 70;            /* 正文和页脚之间至少空 70px */
+  const H = Math.max(1350, footTop + (footLines - 1)*38 + 64);
+
+  /* ---- 2. 按算好的高度绘制 ---- */
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d');
   x.fillStyle = '#f4eee3'; x.fillRect(0,0,W,H);
-  for (let i=0;i<2600;i++){ x.fillStyle = 'rgba(120,100,70,' + (Math.random()*0.05).toFixed(3) + ')'; x.fillRect(Math.random()*W, Math.random()*H, 2, 2); }
+  for (let i=0;i<2600*H/1500;i++){ x.fillStyle = 'rgba(120,100,70,' + (Math.random()*0.05).toFixed(3) + ')'; x.fillRect(Math.random()*W, Math.random()*H, 2, 2); }
   const img = new Image();
   return new Promise(res=>{
     img.onload = ()=>{
       x.save(); x.translate(W/2, 600); x.rotate(-0.018);
       x.shadowColor = 'rgba(60,40,20,.22)'; x.shadowBlur = 30; x.shadowOffsetY = 12;
-      x.fillStyle = '#ffffff'; x.fillRect(-470, -500, 940, 1010);
+      x.fillStyle = '#ffffff'; x.fillRect(-470, -500, 940, 1010 + titleExtra);
       x.shadowColor = 'transparent';
       const pw = 880, ph = 760, ar = img.width/img.height;
       let sw = img.width, sh = img.height, sx = 0, sy = 0;
@@ -3433,40 +3804,46 @@ function buildCard(shot, title){
       x.drawImage(img, sx, sy, sw, sh, -440, -470, pw, ph);
       const gr = x.createLinearGradient(0,-470,0,290); gr.addColorStop(0,'rgba(255,220,170,.10)'); gr.addColorStop(1,'rgba(120,80,160,.10)');
       x.fillStyle = gr; x.fillRect(-440,-470,pw,ph);
-      x.fillStyle = '#4a3a30'; x.font = '600 54px ' + HAND; x.textAlign = 'center';
-      x.fillText(title, 0, 380);
+      x.fillStyle = '#4a3a30'; x.font = '600 ' + titleSize + 'px ' + HAND; x.textAlign = 'center';
+      titleLines.forEach((l,i)=> x.fillText(l, 0, 380 + i*(titleSize + 10)));
       const d = new Date();
       x.fillStyle = '#9a8a78'; x.font = '30px ' + FONT;
-      x.fillText(d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0') + '  ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'), 0, 446);
+      x.fillText(d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0') + '  ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'), 0, 446 + titleExtra);
       x.restore();
       [[150,95,-0.5,'rgba(247,168,208,.72)'],[930,95,0.45,'rgba(143,184,255,.72)']].forEach(([tx,ty,a,c])=>{ x.save(); x.translate(tx,ty); x.rotate(a); x.fillStyle = c; x.fillRect(-90,-24,180,48); x.restore(); });
-      const R = REGIONS[state.region], S = SEASONS[state.season];
-      const tags = [R.label, S.label + '天', state.night ? '夜晚' : '白天'];
-      const wi = whereIdx(); if (wi >= 0) tags.push(['1F 客厅','2F 客房','3F 卧室','后院泳池','前院花园'][wi]);
-      if (state.party) tags.push('派对中');
-      if (curTheme) tags.push(curTheme.name);
-      x.font = '30px ' + FONT; let tx = 90; const ty = 1170;
-      tags.forEach((tg,i)=>{
-        const w = x.measureText(tg).width + 44;
-        x.fillStyle = ['#e9e1f7','#f7e3ec','#e1ecf7','#e4f2ea','#f7efd9'][i%5]; x.beginPath(); if (x.roundRect) x.roundRect(tx, ty-38, w, 54, 27); else x.rect(tx, ty-38, w, 54); x.fill();
-        x.fillStyle = '#5c4c6c'; x.textAlign = 'left'; x.fillText(tg, tx+22, ty-1); tx += w + 14;
+      /* 标签 */
+      x.font = '30px ' + FONT; x.textAlign = 'left';
+      let ci = 0;
+      tagRows.forEach((row, r)=>{
+        let tx = PADX; const ty = tagTop + r*68 + 38;
+        row.forEach(({tg, w})=>{
+          x.fillStyle = ['#e9e1f7','#f7e3ec','#e1ecf7','#e4f2ea','#f7efd9'][ci++ % 5]; x.beginPath(); if (x.roundRect) x.roundRect(tx, ty-38, w, 54, 27); else x.rect(tx, ty-38, w, 54); x.fill();
+          x.fillStyle = '#5c4c6c'; x.fillText(tg, tx+22, ty-1); tx += w + 14;
+        });
       });
-      x.textAlign = 'left'; x.fillStyle = '#6b5a4c'; x.font = '600 32px ' + FONT;
-      x.fillText('今日小事', 90, 1260);
+      /* 今日小事 */
+      x.fillStyle = '#6b5a4c'; x.font = '600 32px ' + FONT;
+      x.fillText('今日小事', PADX + 44, headY);
       x.font = '29px ' + FONT; x.fillStyle = '#7a6a5c';
-      const recent = moments.slice(-3).reverse().map(m=> m.m);
-      if (!recent.length) recent.push('推开门，欢迎回家');
-      let ly = 1310;
-      recent.forEach(m=>{ wrapText(x, '· ' + m, 900).slice(0,2).forEach(l=>{ x.fillText(l, 90, ly); ly += 42; }); });
-      const fr = state.friends ? '和 ' + FRIENDS.map(f=> f.name).join('、') + ' 一起' : '';
+      momentLines.forEach((l,i)=> x.fillText(l, PADX, firstLineY + i*42));
+      /* 页脚：先画一条分隔线，和正文明确分开 */
+      x.strokeStyle = 'rgba(160,140,120,.35)'; x.lineWidth = 2; x.setLineDash([8,8]);
+      x.beginPath(); x.moveTo(PADX, footTop - 40); x.lineTo(W - PADX, footTop - 40); x.stroke(); x.setLineDash([]);
       x.font = '26px ' + FONT; x.fillStyle = '#a3938a';
       memoCount++; try{ localStorage.setItem('dreamHouseMemoN', memoCount); }catch(e){}
-      x.fillText((fr ? fr + '  ·  ' : '') + '小幸福 ' + found.size + ' 个', 90, H-50);
-      x.textAlign = 'right'; x.fillText('月亮饼妙妙屋 · 记忆卡片 No.' + String(memoCount).padStart(3,'0'), W-80, H-50);
+      if (footSameRow){
+        x.textAlign = 'left'; x.fillText(footL[0], PADX, footTop);
+        x.textAlign = 'right'; x.fillText(footR, W - PADX, footTop);
+      } else {
+        x.textAlign = 'left'; footL.forEach((l,i)=> x.fillText(l, PADX, footTop + i*38));
+        x.textAlign = 'right'; x.fillText(footR, W - PADX, footTop + footL.length*38);
+      }
+      /* 装饰：星星跟着标签区，爱心跟着「今日小事」 */
       x.fillStyle = '#e3ad2c';
       const star = (cx,cy,r)=>{ x.beginPath(); for (let i=0;i<10;i++){ const rr = i%2 ? r*0.45 : r, a = i/10*Math.PI*2 - Math.PI/2; i ? x.lineTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr) : x.moveTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr); } x.closePath(); x.fill(); };
-      star(980, 1130, 26); x.fillStyle = '#c39bff'; star(1015, 1200, 14);
-      x.fillStyle = '#f7a8d0'; x.beginPath(); x.moveTo(70,1240); x.bezierCurveTo(70,1222,46,1222,46,1240); x.bezierCurveTo(46,1256,70,1268,70,1276); x.bezierCurveTo(70,1268,94,1256,94,1240); x.bezierCurveTo(94,1222,70,1222,70,1240); x.fill();
+      star(980, tagTop + 10, 26); x.fillStyle = '#c39bff'; star(1015, tagTop + 76, 14);
+      const hy = headY - 24, hx = PADX + 16;
+      x.fillStyle = '#f7a8d0'; x.beginPath(); x.moveTo(hx,hy); x.bezierCurveTo(hx,hy-14,hx-18,hy-14,hx-18,hy); x.bezierCurveTo(hx-18,hy+12,hx,hy+21,hx,hy+27); x.bezierCurveTo(hx,hy+21,hx+18,hy+12,hx+18,hy); x.bezierCurveTo(hx+18,hy-14,hx,hy-14,hx,hy); x.fill();
       res(cv);
     };
     img.src = shot;
@@ -3481,7 +3858,7 @@ async function finishMemory(shot, title){
   const cv = await buildCard(shot, title || autoTitle());
   const url = cv.toDataURL('image/png');
   showCard(url);
-  const th = document.createElement('canvas'); th.width = 432; th.height = 600; th.getContext('2d').drawImage(cv, 0, 0, 432, 600);
+  const th = document.createElement('canvas'); th.width = 432; th.height = Math.round(432*cv.height/cv.width); th.getContext('2d').drawImage(cv, 0, 0, th.width, th.height);
   const list = loadAlbum(); list.push({img: th.toDataURL('image/jpeg', 0.82), full: null, t: Date.now()});
   while (list.length > 12) list.shift();
   saveAlbum(list);
@@ -4407,8 +4784,10 @@ function makeBar(elId, dict, key){
 const REGION_INFO = {
   nordic:['#7fabc7','#31606f','峡湾、松林和小红屋'], kyoto:['#f7c9d6','#c14b39','鸟居、五重塔和小鹿'], sahara:['#f2d48a','#c98a4e','金字塔、狮身人面像和骆驼'],
   alps:['#dcecf6','#6f9fc4','雪山、木屋和牛铃'], jiangnan:['#cfe0d8','#5b7d72','小桥流水乌篷船'], iceland:['#9fe0c8','#33505c','冰川、间歇泉和极光'],
-  santorini:['#cfe6fb','#2f6f9e','蓝顶白墙和爱琴海'], canada:['#f2a33a','#c9452e','枫林、驼鹿和枫糖'], bali:['#a8f0d4','#2f8f93','热带寺庙和冲浪'],
-  moscow:['#f6efe2','#c9452e','红场、洋葱顶和套娃'], quanzhou:['#ffb3c8','#b8483a','古厝、石塔和刺桐花']
+  santorini:['#cfe6fb','#2f6f9e','蓝顶白墙和爱琴海'], bali:['#a8f0d4','#2f8f93','热带寺庙和冲浪'],
+  moscow:['#f6efe2','#c9452e','红场、洋葱顶和套娃'], quanzhou:['#ffb3c8','#b8483a','古厝、石塔和刺桐花'],
+  quebec:['#f2a33a','#5f9e8a','古堡、枫糖和狂欢节雪人'], altai:['#bfe3f2','#3f9fa0','毡房、骏马和禾木小木屋'], jiuzhai:['#9fe6e0','#2a9dbf','五彩海子、瀑布和经幡'],
+  changbai:['#eef6ff','#3f7fb0','天池、雾凇和东北虎'], savanna:['#ffd28a','#c98a3a','长颈鹿、大象和狮子岩'], hainan:['#9fe8f2','#1fb8c9','椰林、海龟和珊瑚礁']
 };
 const regionEl = document.getElementById('regions');
 function refreshRegionBar(){
@@ -4422,12 +4801,16 @@ function refreshRegionBar(){
 }
 {
   const h = document.createElement('div'); h.className = 'rh'; h.innerHTML = '去哪里玩 <span></span>'; regionEl.appendChild(h);
-  Object.keys(REGIONS).forEach(id=>{
+  const GROUPS = [['中国', ['jiangnan','quanzhou','altai','jiuzhai','changbai','hainan']], ['世界', Object.keys(REGIONS).filter(k=> !['jiangnan','quanzhou','altai','jiuzhai','changbai','hainan'].includes(k))]];
+  GROUPS.forEach(([gname, ids])=>{
+  const gh = document.createElement('div'); gh.className = 'rgh'; gh.textContent = gname; regionEl.appendChild(gh);
+  ids.forEach(id=>{
     const b = document.createElement('button'); b.className = 'rg'; b.dataset.id = id;
     const l = document.createElement('span'); l.className = 'rl'; const dot = document.createElement('i'); dot.style.background = REGION_INFO[id][1]; l.appendChild(dot); l.appendChild(document.createTextNode(REGIONS[id].label));
     const sm = document.createElement('small'); b.appendChild(l); b.appendChild(sm);
     b.addEventListener('click', ()=> travelTo(id));
     regionEl.appendChild(b);
+  });
   });
   refreshRegionBar();
 }
@@ -4444,7 +4827,7 @@ function travelTo(id){
   const a = audio(); if (a){ const t0 = a.currentTime; noiseHit(t0, 1.2, 0.08, 'bandpass', 500); tone(523, t0+0.3, 0.4, 'sine', 0.08); tone(784, t0+0.5, 0.6, 'sine', 0.08); }
   regionEl.classList.remove('open');
   setTimeout(()=>{
-    state.region = id; eggFX.forEach(e=>{ scene.remove(e.obj); disposeGeo(e.obj); }); eggFX = [];
+    state.region = id; eggFX.forEach(e=>{ scene.remove(e.obj); disposeGeo(e.obj); }); eggFX = []; document.getElementById('underwater').classList.remove('show');
     buildScenery(); applyLighting(); refreshRegionBar();
     if (!state.walk){ cam.tTheta += Math.PI*0.6; }
     setTimeout(()=>{ travelEl.classList.remove('show'); traveling = false; const n = regionFound(id).length; toastG('欢迎来到' + REGIONS[id].label + '！' + (eggDone(id) ? '这里的彩蛋已经解锁过啦' : '风景里藏着 3 个地标（已找到 ' + n + ' 个）')); }, 650);
